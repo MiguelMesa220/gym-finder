@@ -38,14 +38,21 @@ app.get("/gyms", async (req, res) => {
         headers: {
             "Content-Type": "application/json", 
             "X-Goog-Api-Key": process.env.GOOGLE_PLACES_API_KEY,
-            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.rating",
+            "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.rating",
         },
         body: JSON.stringify(requestBody),
    });
 
    const data = await response.json();
+
+   const formattedGymData = data.places.map((place) => ({
+    id: place.id,
+    name: place.displayName?.text,
+    address: place.formattedAddress,
+    rating: place.rating
+   }));
    
-   res.json(data);
+   res.json(formattedGymData);
 
 });
 
