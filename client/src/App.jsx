@@ -29,9 +29,10 @@ function App() {
   
 
   return (
-    <div>
-      
-      <input
+    <div className="app">
+
+      <div className="search-bar">
+        <input
         type="text"
         placeholder="Latitude"
         value={latitude}
@@ -45,20 +46,23 @@ function App() {
         onChange={(lng)=> setLongitude(lng.target.value)}
       />
 
-
-      <button onClick = {handleUseMyLocation}>
-        Use Current Location
-      </button>
-
       <button onClick = {handleSearch}>
-        Find Gyms
+        Find With Coordinates
+      </button>
+      </div>
+
+      <button
+        className="location-button" 
+        onClick = {handleUseMyLocation}>
+        Use My Location
       </button>
 
       {gyms.map((gym) => (
       <GymCard key ={gym.id} gym={gym}/>
       ))}
 
-      </div>
+    </div>
+    
       
       
   )

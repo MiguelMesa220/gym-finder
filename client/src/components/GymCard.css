@@ -1,0 +1,21 @@
+.gym-card{
+  background-color: #fffaf1;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 70%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Montserrat', sans-serif;
+  
+}
+.gym-card h2 {
+  color: #3f5c41;
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.gym-card p {
+  color: #555;
+  margin: 6px 0;
+  font-family: 'Montserrat', sans-serif;
+}
