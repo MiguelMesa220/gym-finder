@@ -30,6 +30,10 @@ function App() {
 
   return (
     <div className="app">
+      <h1>FIND YOUR GYM</h1>
+      <p className="subtitle">
+        DISCOVER TOP GYMS NEAR YOU
+      </p>
 
       <div className="search-bar">
         <input

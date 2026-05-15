@@ -14,7 +14,7 @@
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Montserrat', sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -53,9 +53,13 @@
 }
 
 body {
+  background-size: cover;
   background-color: #f4ead5;
   margin: 0;
   font-family: 'Montserrat', sans-serif;
+  background-image: url(./assets/ivory\ subway.png);
+  background-position: center;
+  background-attachment: fixed;
 }
 
 #root {
@@ -63,7 +67,6 @@ body {
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -78,14 +81,27 @@ h2 {
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+  text-align: center;
+  font-size: 72px;
+  font-weight: 700;
+  color: #1f4d34;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
   }
 }
+
+.subtitle{
+  text-align: center;
+  color: #355c47;
+  font-size: 20px;
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+
+}
+
 h2 {
   font-size: 24px;
   line-height: 118%;
@@ -114,57 +130,74 @@ code {
   background: var(--code-bg);
 }
 
-.app{
-  padding:24px;
-}
 
 button{
-  background-color: #5f7a61;
+  background-color: #1f4d34;
   color: white;
+
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 16px 28px;
+  border-radius: 14px;
   cursor: pointer;
   margin: 8px;
-  letter-spacing: -0.5px;
-  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-weight: 700;
   font-family: 'Montserrat', sans-serif;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
 }
 
 input {
-  padding: 10px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  letter-spacing: -0.5px;
-  font-weight: 500;
+  background-color: #fffaf1;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  width: 180px;
+
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+
   font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
 }
 
 .location-button {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
   border: none;
   background-color: #5f7a61;
   color: white;
-  font-size: 30px;
+  font-size: 48px;
   cursor: pointer;
   display: block;
-  margin: 40px auto;
-  letter-spacing: -0.5px;
-  font-weight: 500;
+  margin: 60px auto;
+  letter-spacing: -1px;
+  font-weight: 700;
   font-family: 'Montserrat', sans-serif;
+  
 }
 
 .search-bar {
   display: flex;
   justify-content: center;
+  gap: 12px;
   align-items: center;
-  margin-top: 20px;
+  margin-bottom: 40px;
   letter-spacing: -0.5px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
+.app{
+  overflow: hidden;
+
+  width: 800px;
+  height: 4000px;
+  margin: 0 auto;
+  padding: 40px;
+
+  background-color: rgba(244, 234, 213, 0.94);
+  border-radius: 28px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0px 8px 30px rgba(0,0,0,0.08);
+}
 
