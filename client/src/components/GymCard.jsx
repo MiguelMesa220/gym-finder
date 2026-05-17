@@ -7,6 +7,7 @@ function GymCard({gym}) {
       <h2>{gym.name}</h2>
       <p>{gym.address}</p>
       <p>{gym.rating} stars</p>
+      <p>{gym.distance.toFixed(2)} km away</p>
     </div>
 
 
