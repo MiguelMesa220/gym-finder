@@ -11,6 +11,46 @@ app.use(cors());
 
 const PORT = 5000;
 
+async function getTravelTime(selfLat, selfLng, gymLat, gymLng){
+    const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json", 
+            "X-Goog-Api-Key": process.env.GOOGLE_PLACES_API_KEY,
+            "X-Goog-FieldMask": "routes.duration,routes.distanceMeters"
+        },
+
+        body: JSON.stringify({
+            origin: {
+                location: {
+                    latLng: {
+                        latitude:selfLat,
+                        longitude:selfLng
+
+                    }
+                }
+            },
+            destination: {
+                location: {
+                    latLng: {
+                        latitude: gymLat,
+                        longitude: gymLng
+        }
+      }
+    },
+
+    travelMode: "DRIVE"
+         })
+        }
+    );
+    const data = await response.json();
+
+    return data.routes[0];
+
+}
+
+
+
 function haversineDistance(lat1, lng1, lat2, lng2){
     const R = 6371;
     const dlat = (lat2-lat1) * Math.PI / 180;
@@ -62,6 +102,13 @@ app.get("/gyms", async (req, res) => {
    });
 
    const data = await response.json();
+   const route = await getTravelTime(
+    Number(latitude),
+    Number(longitude),
+    43.6532,
+    -79.3832
+   );
+   console.log(route);
 
    const formattedGymData = data.places.map((place) => ({
     id: place.id,
