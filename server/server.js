@@ -136,16 +136,17 @@ app.get("/gyms", async (req, res) => {
             ),
 
             driveDuration: route.duration,
-            driveDistanceMeters: route.driveDistanceMeters
+            driveDistanceMeters: route.distanceMeters
 
          };
 
         })
         
     );
+    res.json(formattedGymData);
+});
 
 
 app.listen(PORT, ()=> {
     console.log(`server running on http://localhost:${PORT}`);
-} );
-
+})

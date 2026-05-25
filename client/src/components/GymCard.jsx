@@ -8,6 +8,7 @@ function GymCard({gym}) {
       <p>{gym.address}</p>
       <p>{gym.rating} stars</p>
       <p>{gym.distance.toFixed(2)} km away</p>
+      <p>{Math.round(parseInt(gym.driveDuration)/60)} min drive</p>
     </div>
 
 
