@@ -110,19 +110,39 @@ app.get("/gyms", async (req, res) => {
    );
    console.log(route);
 
-   const formattedGymData = data.places.map((place) => ({
-    id: place.id,
-    name: place.displayName?.text,
-    address: place.formattedAddress,
-    rating: place.rating,
-    latitude: place.location.latitude,
-    longitude: place.location.longitude,
-    distance: haversineDistance(Number(latitude), Number(longitude), place.location.latitude, place.location.longitude)
-   }));
-   
-   res.json(formattedGymData);
+   const formattedGymData = await Promise.all(
+    data.places.map(async(place)=> {
+        const route = await getTravelTime(
+            Number(latitude),
+            Number (longitude),
 
-});
+            place.location.latitude,
+            place.location.longitude
+        );
+
+        return {
+            id: place.id,
+            name: place.displayName?.text,
+            address: place.formattedAddress,
+            rating: place.rating,
+            latitude: place.location.latitude,
+            longitude: place.location.longitude,
+
+            distance: haversineDistance(
+                Number(latitude),
+                Number(longitude),
+                place.location.latitude,
+                place.location.longitude
+            ),
+
+            driveDuration: route.duration,
+            driveDistanceMeters: route.driveDistanceMeters
+
+         };
+
+        })
+        
+    );
 
 
 app.listen(PORT, ()=> {
