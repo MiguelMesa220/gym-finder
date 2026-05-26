@@ -11,7 +11,7 @@ app.use(cors());
 
 const PORT = 5000;
 
-async function getTravelTime(selfLat, selfLng, gymLat, gymLng){
+async function getTravelTime(selfLat, selfLng, gymLat, gymLng, travelMode){
     const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes",{
         method: "POST",
         headers: {
@@ -39,7 +39,7 @@ async function getTravelTime(selfLat, selfLng, gymLat, gymLng){
       }
     },
 
-    travelMode: "DRIVE"
+    travelMode: travelMode
          })
         }
     );
@@ -79,7 +79,7 @@ app.get("/gyms", async (req, res) => {
 
    const requestBody = {
           includedTypes: ["gym"],
-          maxResultCount: 15,
+          maxResultCount: 5,
           locationRestriction: {
             circle: {
                 center: {
@@ -112,12 +112,21 @@ app.get("/gyms", async (req, res) => {
 
    const formattedGymData = await Promise.all(
     data.places.map(async(place)=> {
-        const route = await getTravelTime(
+        const driveRoute = await getTravelTime(
             Number(latitude),
             Number (longitude),
 
             place.location.latitude,
-            place.location.longitude
+            place.location.longitude,
+            "DRIVE"
+        );
+        const transitRoute = await getTravelTime(
+            Number(latitude),
+            Number (longitude),
+
+            place.location.latitude,
+            place.location.longitude,
+            "TRANSIT"
         );
 
         return {
@@ -135,8 +144,11 @@ app.get("/gyms", async (req, res) => {
                 place.location.longitude
             ),
 
-            driveDuration: route.duration,
-            driveDistanceMeters: route.distanceMeters
+            driveDuration: driveRoute.duration,
+            driveDistanceMeters: driveRoute.distanceMeters,
+
+            transitDuration: transitRoute.duration,
+            transitDistanceMeters: transitRoute.distanceMeters
 
          };
 
