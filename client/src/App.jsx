@@ -7,6 +7,8 @@ function App() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
 
+  const[sortMode, setSortMode] = useState("drive");
+
   async function handleSearch(){
     console.log("frontend latitude:", latitude);
     console.log("frontend longitude:", longitude);
@@ -26,7 +28,21 @@ function App() {
     })
   }
 
-  
+  const sortedGyms = [...gyms].sort((a,b)=>{
+    if (sortMode ==="drive") {
+      return parseInt(a.driveDuration) - parseInt(b.driveDuration);
+    }
+    if (sortMode ==="transit") {
+      return parseInt(a.transitDuration) - parseInt(b.transitDuration);
+    }
+    if (sortMode ==="distance") {
+      return parseInt(a.distance) - parseInt(b.distance);
+    } 
+    if (sortMode ==="rating") {
+      return parseInt(b.rating) - parseInt(a.rating);
+    } 
+    return 0; 
+  });
 
   return (
     <div className="app">
@@ -61,7 +77,14 @@ function App() {
         Use My Location
       </button>
 
-      {gyms.map((gym) => (
+      <select value={sortMode} onChange={(e)=> setSortMode(e.target.value)}>
+        <option value="drive">Drive Time</option>
+        <option value="transit">Transit Time</option>
+        <option value="distance">Distance</option>
+        <option value="rating">Rating</option>
+      </select>
+
+      {sortedGyms.map((gym) => (
       <GymCard key ={gym.id} gym={gym}/>
       ))}
 
