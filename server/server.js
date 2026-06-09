@@ -11,6 +11,61 @@ app.use(cors());
 
 const PORT = 5000;
 
+function getGymCategory(name){
+    const lowerName = name.toLowerCase();
+
+    if (
+        lowerName.includes("goodlife") || 
+        lowerName.includes("fit4less") ||
+        lowerName.includes("lifetime") ||
+        lowerName.includes("anytime fitness") || 
+        lowerName.includes("planet fitness") || 
+        lowerName.includes("la fitness") || 
+        lowerName.includes("crunch") || 
+        lowerName.includes("movati")
+    ){
+        return "Commercial Gym";
+    }
+    if (
+        lowerName.includes("crossfit")
+    ){
+        return "Crossfit";
+    }
+    if(
+        lowerName.includes("yoga") || lowerName.includes("pilates")
+    ){
+        return "Yoga/Pilates";
+    }
+    if (
+        lowerName.includes("karate") ||
+        lowerName.includes("jiu") || 
+        lowerName.includes("martial") ||
+        lowerName.includes("mma") ||
+        lowerName.includes("boxing") || 
+        lowerName.includes("taekwondo") ||
+        lowerName.includes("judo") ||
+        lowerName.includes("kickboxing") || 
+        lowerName.includes("fighting")
+
+    ){
+        return "Martial Arts";
+    }
+     if (
+        lowerName.includes("boulderz") ||
+        lowerName.includes("rock") ||
+        lowerName.includes("peak") || 
+        lowerName.includes("bloc") ||
+        lowerName.includes("climbing") ||
+        lowerName.includes("boulders") ||
+        lowerName.includes("rocks")
+    ){
+        return "Climbing";
+    }
+    return "Other";
+    
+
+}
+
 async function getTravelTime(selfLat, selfLng, gymLat, gymLng, travelMode){
     const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes",{
         method: "POST",
@@ -79,7 +134,7 @@ app.get("/gyms", async (req, res) => {
 
    const requestBody = {
           includedTypes: ["gym"],
-          maxResultCount: 5,
+          maxResultCount: 15,
           locationRestriction: {
             circle: {
                 center: {
@@ -134,6 +189,7 @@ app.get("/gyms", async (req, res) => {
             name: place.displayName?.text,
             address: place.formattedAddress,
             rating: place.rating,
+            category:getGymCategory(place.displayName?.text || ""),
             latitude: place.location.latitude,
             longitude: place.location.longitude,
 

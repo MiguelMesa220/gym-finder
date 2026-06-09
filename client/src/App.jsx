@@ -7,7 +7,8 @@ function App() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
 
-  const[sortMode, setSortMode] = useState("drive");
+  const [sortMode, setSortMode] = useState("drive");
+  const [commercialOnly, setCommercialOnly] = useState(false);
 
   async function handleSearch(){
     console.log("frontend latitude:", latitude);
@@ -17,6 +18,7 @@ function App() {
     setGyms(data);
     console.log("button clicked");
     console.log(data);
+    console.log(data.map((gym)=>gym.category));
 
 
   }
@@ -43,6 +45,8 @@ function App() {
     } 
     return 0; 
   });
+
+  const filteredGyms = commercialOnly? sortedGyms.filter((gym)=>gym.category === "Commercial Gym"): sortedGyms;
 
   return (
     <div className="app">
@@ -77,6 +81,17 @@ function App() {
         Use My Location
       </button>
 
+      <label>Commercial Gyms Only</label>
+      <div className="checkerbox">
+        
+        <input
+        type="checkbox"
+        checked={commercialOnly}
+        onChange={(e)=>setCommercialOnly(e.target.checked)}
+        />
+        
+      </div>
+
       <select value={sortMode} onChange={(e)=> setSortMode(e.target.value)}>
         <option value="drive">Drive Time</option>
         <option value="transit">Transit Time</option>
@@ -84,7 +99,7 @@ function App() {
         <option value="rating">Rating</option>
       </select>
 
-      {sortedGyms.map((gym) => (
+      {filteredGyms.map((gym) => (
       <GymCard key ={gym.id} gym={gym}/>
       ))}
 

@@ -160,6 +160,16 @@
     height: 48px;
   }
 }
+.checkerbox input[type="checkbox"]{
+  transform: scale(1.5);
+}
+.checkerbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  margin-bottom: 30px;
+}
 
 .ticks {
   position: relative;
