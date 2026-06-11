@@ -10,15 +10,15 @@ function App() {
   const [sortMode, setSortMode] = useState("drive");
   const [commercialOnly, setCommercialOnly] = useState(false);
 
+  const [address, setAddress] = useState("");
+
   async function handleSearch(){
-    console.log("frontend latitude:", latitude);
-    console.log("frontend longitude:", longitude);
-    const response = await fetch(`http://localhost:5000/gyms?lat=${latitude}&lng=${longitude}`);
+    const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
+    const geoData = await geoResponse.json();
+
+    const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
     const data = await response.json();
     setGyms(data);
-    console.log("button clicked");
-    console.log(data);
-    console.log(data.map((gym)=>gym.category));
 
 
   }
@@ -58,20 +58,14 @@ function App() {
       <div className="search-bar">
         <input
         type="text"
-        placeholder="Latitude"
-        value={latitude}
-        onChange={(lat)=> setLatitude(lat.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Longitude"
-        value={longitude}
-        onChange={(lng)=> setLongitude(lng.target.value)}
+        placeholder="Enter address"
+        value={address}
+        onChange={(e)=>setAddress(e.target.value)}
+      
       />
 
       <button onClick = {handleSearch}>
-        Find With Coordinates
+        Search
       </button>
       </div>
 
