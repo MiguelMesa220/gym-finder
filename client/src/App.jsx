@@ -75,15 +75,15 @@ function App() {
         Use My Location
       </button>
 
-      <label>Commercial Gyms Only</label>
       <div className="checkerbox">
+        <label>Commercial Gyms Only</label>
         
         <input
         type="checkbox"
         checked={commercialOnly}
         onChange={(e)=>setCommercialOnly(e.target.checked)}
+        style={{width: '20px'}}
         />
-        
       </div>
 
       <select value={sortMode} onChange={(e)=> setSortMode(e.target.value)}>

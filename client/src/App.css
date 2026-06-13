@@ -165,10 +165,10 @@
 }
 .checkerbox {
   display: flex;
-  align-items: center;
+  align-items: space-between;
   justify-content: center;
-  gap: 0px;
-  margin-bottom: 30px;
+  /* gap: 0px;
+  margin-bottom: 30px; */
 }
 
 .ticks {
