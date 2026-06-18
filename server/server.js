@@ -230,6 +230,19 @@ app.get("/geocode", async(req,res)=>{
 
 });
 
+app.get("/reverse-geocode", async(req,res) => {
+    const lat = req.query.lat;
+    const lng = req.query.lng;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const location = data.results[0].formatted_address;
+
+    res.json({address: location});
+});
+
 app.listen(PORT, ()=> {
     console.log(`server running on http://localhost:${PORT}`);
 })

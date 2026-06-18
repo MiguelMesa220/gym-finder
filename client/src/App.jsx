@@ -24,9 +24,17 @@ function App() {
   }
 
   function handleUseMyLocation(){
-    navigator.geolocation.getCurrentPosition((position)=>{
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
+    navigator.geolocation.getCurrentPosition(async (position)=>{
+      const lat= position.coords.latitude;
+      const lng= position.coords.longitude;
+
+      setLatitude(lat);
+      setLongitude(lng);
+
+      const response = await fetch(`http://localhost:5000/reverse-geocode?lat=${lat}&lng=${lng}`);
+      const data = await response.json();
+
+      setAddress(data.address);
     })
   }
 
