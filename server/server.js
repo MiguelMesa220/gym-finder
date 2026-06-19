@@ -243,6 +243,20 @@ app.get("/reverse-geocode", async(req,res) => {
     res.json({address: location});
 });
 
+app.get("/autocomplete", async (req, req)=>{
+    const input = req.query.input;
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const suggestions = data.predictions.map((prediction)=> ({
+        description: prediction.description,
+        placeID: prediction.place_id,
+    }));
+    res.json(suggestions);
+});
+
 app.listen(PORT, ()=> {
     console.log(`server running on http://localhost:${PORT}`);
 })
