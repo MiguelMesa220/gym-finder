@@ -185,7 +185,36 @@ input {
   letter-spacing: -0.5px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
+
+  position: relative;
 }
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 65px;
+  left: 235px;
+
+  width: 320px;
+
+  background: #fffaf1;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+  overflow: hidden;
+  z-index: 100;
+}
+
+.suggestion-item {
+  padding: 14px 18px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  color:#08060d;
+}
+
+.suggestion-item:hover{
+  background: #f4ead5;
+}
+
 
 .app{
   overflow: hidden;

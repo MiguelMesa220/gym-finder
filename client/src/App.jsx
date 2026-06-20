@@ -10,6 +10,8 @@ function App() {
   const [sortMode, setSortMode] = useState("drive");
   const [commercialOnly, setCommercialOnly] = useState(false);
 
+  const [suggestions, setSuggestions] = useState([]);
+
   const [address, setAddress] = useState("");
 
   async function handleSearch(){
@@ -20,6 +22,24 @@ function App() {
     const data = await response.json();
     setGyms(data);
 
+
+  }
+
+  async function handleAddressChange(e){
+    const value = e.target.value;
+    setAddress(value);
+
+    if (value.length < 3){
+      setSuggestions([]);
+      return;
+    }
+
+    const response = await fetch(
+      `http://localhost:5000/autocomplete?input=${encodeURIComponent(value)}`
+    );
+
+    const data = await response.json();
+    setSuggestions(data);
 
   }
 
@@ -66,12 +86,25 @@ function App() {
       <div className="search-bar">
         <input
         type="text"
-        placeholder="Enter address"
         value={address}
-        onChange={(e)=>setAddress(e.target.value)}
-      
-      />
-
+        onChange={handleAddressChange}
+        placeholder="Enter address"
+        />
+        {suggestions.length > 0 && (
+          <div className="suggestions-dropdown">
+            {suggestions.map((suggestion)=>( 
+              <div
+                className="suggestion-item" 
+                key={suggestion.placeId}
+                onClick={()=>{
+                  setAddress(suggestion.description);
+                  setSuggestions([]);
+              }}>
+                {suggestion.description}
+              </div>
+            ))}
+            </div>
+        )}
       <button onClick = {handleSearch}>
         Search
       </button>

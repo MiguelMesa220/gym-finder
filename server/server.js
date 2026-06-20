@@ -243,7 +243,7 @@ app.get("/reverse-geocode", async(req,res) => {
     res.json({address: location});
 });
 
-app.get("/autocomplete", async (req, req)=>{
+app.get("/autocomplete", async (req, res)=>{
     const input = req.query.input;
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
