@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import GymCard from "./components/GymCard";
 import './App.css'
 
@@ -14,6 +14,8 @@ function App() {
 
   const [address, setAddress] = useState("");
 
+  const resultsRef = useRef(null);
+
   async function handleSearch(){
     const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
     const geoData = await geoResponse.json();
@@ -21,6 +23,13 @@ function App() {
     const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
     const data = await response.json();
     setGyms(data);
+
+    setTimeout(()=>{
+      resultsRef.current?.scrollIntoView({
+        behaviour: "smooth",
+        block: "start",
+      });
+    }, 100);
 
 
   }
@@ -133,6 +142,8 @@ function App() {
         <option value="distance">Distance</option>
         <option value="rating">Rating</option>
       </select>
+
+      <div ref={resultsRef}></div>
 
       {filteredGyms.map((gym) => (
       <GymCard key ={gym.id} gym={gym}/>
