@@ -14,15 +14,19 @@ function App() {
 
   const [address, setAddress] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const resultsRef = useRef(null);
 
   async function handleSearch(){
+    setLoading(true);
     const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
     const geoData = await geoResponse.json();
 
     const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
     const data = await response.json();
     setGyms(data);
+    setLoading(false);
 
     setTimeout(()=>{
       resultsRef.current?.scrollIntoView({
@@ -30,8 +34,6 @@ function App() {
         block: "start",
       });
     }, 100);
-
-
   }
 
   async function handleAddressChange(e){
@@ -117,12 +119,13 @@ function App() {
       <button onClick = {handleSearch}>
         Search
       </button>
+      
       </div>
 
       <button
         className="location-button" 
         onClick = {handleUseMyLocation}>
-        Use My Location
+        {loading ? "Finding Gyms..." : "Use My Location"}
       </button>
 
       <div className="checkerbox">
@@ -148,8 +151,9 @@ function App() {
       {filteredGyms.map((gym) => (
       <GymCard key ={gym.id} gym={gym}/>
       ))}
-
+    
     </div>
+    
     
       
       
