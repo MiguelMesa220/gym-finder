@@ -273,14 +273,37 @@ app.get("/geocode", async(req,res)=>{
 app.get("/reverse-geocode", async(req,res) => {
     const lat = req.query.lat;
     const lng = req.query.lng;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
+    if(!lat || !lng){
+        return res.status(400).json({error: "Missing Latitude/Longitude"});
+    }
 
-    const location = data.results[0].formatted_address;
+    try{
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
-    res.json({address: location});
+        const response = await fetch(url);
+
+        if(!response.ok){
+            return res.status(500).json({error: "Reverse Geocode API Request Failed"});
+        }
+
+        const data = await response.json();
+
+        if(!data.results || data.results.length == 0){
+            return res.status(404).json({error: "No Address Found"});
+        }
+
+        const location = data.results[0].formatted_address;
+
+        res.json({address: location});
+
+    }
+    catch(error){
+        return res.status(500).json({error: "Internal Server Error"});
+
+    }
+
+    
 });
 
 app.get("/autocomplete", async (req, res)=>{
