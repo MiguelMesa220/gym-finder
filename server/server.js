@@ -130,6 +130,11 @@ app.get("/gyms", async (req, res) => {
    const latitude = req.query.lat;
    const longitude = req.query.lng;
 
+   if(!latitude || !longitude){
+    return res.status(400).json({error: "Couldn't Retrieve Latitude/Longitude"});
+   }
+
+   try{
    const url = "https://places.googleapis.com/v1/places:searchNearby";
 
    const requestBody = {
@@ -156,7 +161,16 @@ app.get("/gyms", async (req, res) => {
         body: JSON.stringify(requestBody),
    });
 
+   if(!response.ok) {
+    return res.status(500).json({error: "Places API Request Failed"});
+   }
+
    const data = await response.json();
+
+   if(!data.places || data.places.length == 0){
+    return res.status(404).json({error: "No Gyms Found"});
+   }
+
    const route = await getTravelTime(
     Number(latitude),
     Number(longitude),
@@ -212,22 +226,48 @@ app.get("/gyms", async (req, res) => {
         
     );
     res.json(formattedGymData);
-});
+   }
+   catch(error){
+    return res.status(500).json({error: "Internal Server Error"});
+   }
+
+}
+
+);
 
 app.get("/geocode", async(req,res)=>{
     const address = req.query.address;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
+    if (!address){
+        return res.status(400).json({ error:"Missing Address"});
+    }
 
-    const location = data.results[0].geometry.location;
+    try{
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
-    res.json({
-        latitude: location.lat,
-        longitude: location.lng,
-    });
+        const response = await fetch(url);
 
+        if(!response.ok){
+            return res.status(500).json({error: "Google Geocoding API Request Failed"});
+        }
+
+        const data = await response.json();
+
+        if(!data.results || data.results.length == 0){
+            return res.status(404).json({error: "No Address Found"});
+        }
+
+        const location = data.results[0].geometry.location;
+
+        res.json({
+            latitude: location.lat,
+            longitude: location.lng,
+        });
+    }
+    catch (error){
+        return res.status(500).json({error: "Internal Server Error"});
+
+    }
 });
 
 app.get("/reverse-geocode", async(req,res) => {

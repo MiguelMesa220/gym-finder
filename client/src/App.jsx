@@ -7,6 +7,8 @@ function App() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
 
+  const [error, setError] = useState("");
+
   const [sortMode, setSortMode] = useState("drive");
   const [commercialOnly, setCommercialOnly] = useState(false);
 
@@ -19,21 +21,41 @@ function App() {
   const resultsRef = useRef(null);
 
   async function handleSearch(){
-    setLoading(true);
-    const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
-    const geoData = await geoResponse.json();
+    setError("");
+    if(!address.trim()){
+      setError("Please enter an address");
+      return;
+    }
+    try{
+      setLoading(true);
+      const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
+      if(!geoResponse.ok){
+        throw new Error("geocoding failed");
+      }
+      const geoData = await geoResponse.json();
 
-    const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
-    const data = await response.json();
-    setGyms(data);
-    setLoading(false);
+      const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
+      if(!response.ok){
+        throw new Error("Gym Search Failed");
 
-    setTimeout(()=>{
+      }
+
+      const data = await response.json();
+      setGyms(data);
+
+      setTimeout(()=>{
       resultsRef.current?.scrollIntoView({
-        behaviour: "smooth",
+        behavior: "smooth",
         block: "start",
-      });
-    }, 100);
+        });
+      }, 100);
+    }
+    catch (error){
+      setError(error.message);
+    }
+    finally{
+      setLoading(false);
+    }
   }
 
   async function handleAddressChange(e){
