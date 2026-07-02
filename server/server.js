@@ -308,16 +308,37 @@ app.get("/reverse-geocode", async(req,res) => {
 
 app.get("/autocomplete", async (req, res)=>{
     const input = req.query.input;
-    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
+    if (!input || input.length < 3){
+        return res.json([]);
+    }
 
-    const response = await fetch(url);
-    const data = await response.json();
+    try{
+        const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
-    const suggestions = data.predictions.map((prediction)=> ({
-        description: prediction.description,
-        placeID: prediction.place_id,
-    }));
-    res.json(suggestions);
+        const response = await fetch(url);
+
+        if (!response.ok){
+            return res.status(500).json({error: "autocomplete API request failed"});
+        }
+
+        const data = await response.json();
+
+        if(!data.predictions || data.predictions.length === 0){
+            return res.json([]);
+        }
+
+        const suggestions = data.predictions.map((prediction)=> ({
+            description: prediction.description,
+            placeID: prediction.place_id,
+        }));
+        res.json(suggestions);
+
+    }
+    catch(error){
+        return res.status(500).json({error: "Internal Server Error"});
+    }
+    
+
 });
 
 app.listen(PORT, ()=> {
