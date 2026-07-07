@@ -33,6 +33,8 @@ function App() {
         throw new Error("geocoding failed");
       }
       const geoData = await geoResponse.json();
+      setLatitude(geoData.latitude);
+      setLongitude(geoData.longitude);
 
       const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
       if(!response.ok){
@@ -90,6 +92,7 @@ function App() {
       setAddress(data.address);
     })
   }
+
 
   const sortedGyms = [...gyms].sort((a,b)=>{
     if (sortMode ==="drive") {
@@ -171,7 +174,12 @@ function App() {
       <div ref={resultsRef}></div>
 
       {filteredGyms.map((gym) => (
-      <GymCard key ={gym.id} gym={gym}/>
+      <GymCard 
+        key ={gym.id} 
+        gym={gym}
+        searchLat={latitude}
+        searchLng={longitude}
+        />
       ))}
     
     </div>
