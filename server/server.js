@@ -177,7 +177,6 @@ app.get("/gyms", async (req, res) => {
     43.6532,
     -79.3832
    );
-   console.log(route);
 
    const formattedGymData = await Promise.all(
     data.places.map(async(place)=> {
