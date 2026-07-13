@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 
-const PORT = 5000;
+const PORT = process.env.port || 5000;
 
 function getGymCategory(name){
     const lowerName = name.toLowerCase();
