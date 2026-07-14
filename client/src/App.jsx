@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import GymCard from "./components/GymCard";
 import './App.css'
+const API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const [gyms, setGyms] = useState([]);
@@ -28,7 +29,7 @@ function App() {
     }
     try{
       setLoading(true);
-      const geoResponse = await fetch(`http://localhost:5000/geocode?address=${encodeURIComponent(address)}`);
+      const geoResponse = await fetch(`${API_URL}/geocode?address=${encodeURIComponent(address)}`);
       if(!geoResponse.ok){
         throw new Error("geocoding failed");
       }
@@ -36,7 +37,7 @@ function App() {
       setLatitude(geoData.latitude);
       setLongitude(geoData.longitude);
 
-      const response = await fetch(`http://localhost:5000/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
+      const response = await fetch(`${API_URL}/gyms?lat=${geoData.latitude}&lng=${geoData.longitude}`);
       if(!response.ok){
         throw new Error("Gym Search Failed");
 
@@ -70,7 +71,7 @@ function App() {
     }
 
     const response = await fetch(
-      `http://localhost:5000/autocomplete?input=${encodeURIComponent(value)}`
+      `${API_URL}/autocomplete?input=${encodeURIComponent(value)}`
     );
 
     const data = await response.json();
@@ -86,7 +87,7 @@ function App() {
       setLatitude(lat);
       setLongitude(lng);
 
-      const response = await fetch(`http://localhost:5000/reverse-geocode?lat=${lat}&lng=${lng}`);
+      const response = await fetch(`${API_URL}/reverse-geocode?lat=${lat}&lng=${lng}`);
       const data = await response.json();
 
       setAddress(data.address);
